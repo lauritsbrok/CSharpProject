@@ -22,22 +22,47 @@ public class Program{
         // }
     }
 
-    public static IEnumerable<Commit> CommitFrequencyMode(String path){
-        using (var repo = new Repository(path))
-            {
-            Console.WriteLine(Repository.IsValid(path));
-            var commits = repo.Branches.SelectMany(x => x.Commits)
-                .GroupBy(x => x.Sha)
-                .Select(x => x.First())
-                .ToArray();;
-            foreach (var commit in commits) {
-            Console.WriteLine(commit + " " + commit.Author.When + " " + commit.Author.Name);
+    public static IEnumerable<String> CommitFrequencyMode(String path){
+        if(Repository.IsValid(path)){
+            var commitDataList = new Dictionary<int, DateTimeOffset>();
+            using (var repo = new Repository(path))
+                {
+                Console.WriteLine(Repository.IsValid(path));
+                var commits = repo.Branches.SelectMany(x => x.Commits)
+                    .GroupBy(x => x.Sha)
+                    .Select(x => x.First())
+                    .ToArray();
+                foreach (var commit in commits) {
+                    var commitName = commit;
+                    var commitDate = commit.Author.When;
+                    
+                //commitDataList.Add();
+                Console.WriteLine(commit + " " + commitDate + " " + commit.Author.Name);
+                }
             }
+            return new List<String>();
         }
-        return new List<Commit>();
+        throw new ArgumentException();
     }
 
     public static IEnumerable<String> CommitAuthorMode(String path){
-        throw new NotImplementedException();
+        if(Repository.IsValid(path)){
+            using (var repo = new Repository(path))
+                {
+                Console.WriteLine(Repository.IsValid(path));
+                var commits = repo.Branches.SelectMany(x => x.Commits)
+                    .GroupBy(x => x.Sha)
+                    .Select(x => x.First())
+                    .ToArray();;
+                foreach (var commit in commits) {
+                    var commitName = commit;
+                    var commitDate = commit.Author.When;
+                    var commitAuthor = commit.Author.Name;
+                    Console.WriteLine(commit + " " + commit.Author.When + " " + commit.Author.Name);
+                }
+            }
+            return new List<String>();
+        }
+        throw new ArgumentException();
     }
 }
