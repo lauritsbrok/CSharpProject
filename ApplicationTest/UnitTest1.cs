@@ -33,30 +33,34 @@ public class UnitTest1
     public void TestCommitAuthorMode()
     {
         // Arrange
-        var path = "GITHUBPATH";
-        var excepted = new List<String>() {
-            "Marie Beaumin",
-                "1 2017-12-08",
-                "6 2017-12-26",
-                "12 2018-01-01",
-                "13 2018-01-02",
-                "10 2018-01-14",
-                "7 2018-01-17",
-                "5 2018-01-18",
-            "Maxime Kauta",
-                "5 2017-12-06",
-                "3 2017-12-07",
-                "1 2018-01-01",
-                "10 2018-01-02",
-                "21 2018-01-03",
-                "1 2018-01-04",
-                "5 2018-01-05" 
-        };
+        var expected = new Dictionary<String, Dictionary<String, int>>();
+        var datecommits1 = new Dictionary<String, int>();
+        var datecommits2 = new Dictionary<String, int>();
+        var datecommits3 = new Dictionary<String, int>();
+        var datecommits4 = new Dictionary<String, int>();
+        var datecommits5 = new Dictionary<String, int>();
+        datecommits1.Add("11-10-2022", 4);
+        expected.Add("Laurits Brok", datecommits1);
+        datecommits2.Add("07-10-2022", 2);
+        expected.Add("mbjn", datecommits2);
+        datecommits3.Add("07-10-2022", 2);
+        expected.Add("HelgeCPH", datecommits3);
+        datecommits4.Add("06-10-2022", 4);
+        datecommits4.Add("25-09-2022", 2);
+        datecommits4.Add("21-10-2021", 2);
+        datecommits4.Add("04-10-2021", 2);
+        datecommits4.Add("03-10-2021", 1);
+        datecommits4.Add("02-10-2021", 1);
+        datecommits4.Add("24-09-2021", 1);
+        expected.Add("Rasmus Lystrøm", datecommits4);
+        datecommits5.Add("15-10-2021", 4);
+        expected.Add("GitHub Enterprise", datecommits5);
 
         // Act
+        var path = "/Users/lauritsbrok/Documents/Drev/ITU/Analysis, Design and Software Architecture/assignment-05";
         var actual = Program.CommitAuthorMode(path);
     
         // Assert
-        excepted.Should().BeEquivalentTo(actual);
+        expected.Should().BeEquivalentTo(actual);
     }
 }

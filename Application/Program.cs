@@ -7,7 +7,7 @@ public class Program{
         var path = Console.ReadLine();
         Console.WriteLine("Choose desired info");
         Console.WriteLine("1) Commit Frequency Mode");
-        Console.WriteLine("2) Commit Frequency Mode");
+        Console.WriteLine("2) Commit Author Mode");
         int chosenMode = int.Parse(Console.ReadLine()!);
         switch (chosenMode) {
             case 1:
@@ -16,8 +16,17 @@ public class Program{
                 Console.WriteLine(commit);
             }
             break;
+
             case 2:
-            CommitAuthorMode(path!);
+            var dict = CommitAuthorMode(path!);
+
+            foreach(var a in dict) {
+                Console.WriteLine(a.Key);
+                foreach(var b in a.Value){
+                    Console.WriteLine("      " + b.Value.ToString() + " " + b.Key);
+                }
+                Console.WriteLine();
+            }
             break;
         }
     }
@@ -28,7 +37,6 @@ public class Program{
             var listCommit = new List<String>();
             using (var repo = new Repository(path))
                 {
-                Console.WriteLine(Repository.IsValid(path));
                 var commits = repo.Branches.SelectMany(x => x.Commits)
                     .GroupBy(x => x.Sha)
                     .Select(x => x.First())
@@ -48,24 +56,27 @@ public class Program{
         throw new ArgumentException();
     }
 
-    public static IEnumerable<String> CommitAuthorMode(String path){
-        if(Repository.IsValid(path)){
-            using (var repo = new Repository(path))
-                {
-                Console.WriteLine(Repository.IsValid(path));
-                var commits = repo.Branches.SelectMany(x => x.Commits)
-                    .GroupBy(x => x.Sha)
-                    .Select(x => x.First())
-                    .ToArray();;
-                foreach (var commit in commits) {
-                    var commitName = commit;
-                    var commitDate = commit.Author.When;
-                    var commitAuthor = commit.Author.Name;
-                    Console.WriteLine(commit + " " + commit.Author.When + " " + commit.Author.Name);
-                }
+    public static Dictionary<String, Dictionary<String, int>> CommitAuthorMode(String path){
+        var repo = new Repository(path);
+        var commits = repo.Commits;
+
+        var commitsByNameAndDateAndCount = new Dictionary<String, Dictionary<String, int>>();
+
+        foreach(Commit a in commits){
+            var commitName = a.Committer.Name;
+            var commitDate = a.Committer.When.Date.ToString().Replace(" 00.00.00", "").Replace(".", "-");
+
+            Dictionary<String, int> currentDict;
+            if(!commitsByNameAndDateAndCount.TryGetValue(commitName, out currentDict)){
+                var dict = new Dictionary<String, int>();
+                dict.Add(commitDate, 1);
+                commitsByNameAndDateAndCount.Add(commitName, dict);
             }
-            return new List<String>();
+
+            int count;
+            commitsByNameAndDateAndCount[commitName].TryGetValue(commitDate, out count);
+            commitsByNameAndDateAndCount[commitName][commitDate] = count + 1;
         }
-        throw new ArgumentException();
+        return commitsByNameAndDateAndCount;
     }
 }
