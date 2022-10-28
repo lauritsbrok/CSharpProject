@@ -7,10 +7,9 @@ public class UnitTest1
     public void TestCommitFrequencyMode()
     {
         // Arrange
-        var path = @"C:\Users\chris\OneDrive\Skrivebord\GIthubRepo\assignment-05";
+        var path = "/Users/lauritsbrok/Documents/Drev/ITU/Analysis, Design and Software Architecture/assignment-05";
         var excepted = new List<String>() {
-            "5 11-10-2022",
-            "2 10-10-2022",
+            "3 11-10-2022",
             "2 07-10-2022",
             "3 06-10-2022",
             "2 25-09-2022",
@@ -19,7 +18,8 @@ public class UnitTest1
             "2 04-10-2021",
             "1 03-10-2021",
             "1 02-10-2021",
-            "1 24-09-2021"
+            "1 24-09-2021",
+            "2 10-10-2022"
         };
 
         // Act

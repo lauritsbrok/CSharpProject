@@ -42,7 +42,7 @@ public class Program{
                     .Select(x => x.First())
                     .ToArray();
                 foreach (var commit in commits) {
-                    var commitDate = commit.Author.When.Date.ToString().Replace(" 00:00:00", "");
+                    var commitDate = commit.Author.When.Date.ToString().Replace(" 00.00.00", "").Replace(".", "-");
                     if(commitDict.ContainsKey(commitDate)) {
                         commitDict[commitDate] += 1;
                     } else {
