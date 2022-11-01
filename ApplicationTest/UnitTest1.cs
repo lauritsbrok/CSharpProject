@@ -8,10 +8,7 @@ public class UnitTest1
     String path;
 
     public UnitTest1(){
-        if(!Directory.Exists("../../../../extracted")){
-            ZipFile.ExtractToDirectory("../../../../assignment-05.zip", "../../../../extracted");
-        }
-        path = "../../../../small_repo";
+        path = "../../../../assignment-05.git";
     }
 
     [Fact]
