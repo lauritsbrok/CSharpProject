@@ -31,6 +31,20 @@ public class Program{
         }
     }
 
+
+    private static void InsertData(){
+        using(NpgsqlConnection con=GetConnection());
+        {
+            string query = @"Somethung";
+            NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+            con.Open();
+        }
+    }
+
+    public static NpgsqlConnection GetConnection(){
+        return  new NpgsqlConnection(@"Server=localhost;Port=5432;User Id=danielnygaard;Password=0;Database=Cdatabse;");
+    }
+
     public static IEnumerable<String> CommitFrequencyMode(String path){
         if(Repository.IsValid(path)){
             var commitDict = new Dictionary<String, int>();
