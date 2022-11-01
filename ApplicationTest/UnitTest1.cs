@@ -1,4 +1,6 @@
 namespace Application.Tests;
+
+using LibGit2Sharp;
 using Program;
 
 public class UnitTest1
@@ -7,7 +9,7 @@ public class UnitTest1
     public void TestCommitFrequencyMode()
     {
         // Arrange
-        var path = "/Users/lauritsbrok/Documents/Drev/ITU/Analysis, Design and Software Architecture/assignment-05";
+        var path = "../../../../assignment-05";
         var excepted = new List<String>() {
             "3 11-10-2022",
             "2 07-10-2022",
@@ -57,7 +59,7 @@ public class UnitTest1
         expected.Add("GitHub Enterprise", datecommits5);
 
         // Act
-        var path = "/Users/lauritsbrok/Documents/Drev/ITU/Analysis, Design and Software Architecture/assignment-05";
+        var path = "../../../../assignment-05";
         var actual = Program.CommitAuthorMode(path);
     
         // Assert
