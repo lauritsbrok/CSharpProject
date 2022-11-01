@@ -64,7 +64,9 @@ public class Program{
 
         foreach(Commit a in commits){
             var commitName = a.Committer.Name;
-            var commitDate = a.Committer.When.Date.ToString().Replace(" 00.00.00", "").Replace(".", "-");
+            var commitDate = a.Committer.When.Date.ToString();
+            commitDate = commitDate.Replace(" 00.00.00", "").Replace(".", "-");
+            commitDate = commitDate.Replace(" 00:00:00", "").Replace("/", "-");
 
             Dictionary<String, int> currentDict;
             if(!commitsByNameAndDateAndCount.TryGetValue(commitName, out currentDict)){
