@@ -1,4 +1,6 @@
-﻿namespace Program;
+﻿using System.Globalization;
+
+namespace Program;
 
 public class Program{
 
@@ -42,7 +44,7 @@ public class Program{
                     .Select(x => x.First())
                     .ToArray();
                 foreach (var commit in commits) {
-                    var commitDate = commit.Author.When.Date.ToShortDateString().ToString();
+                    var commitDate = commit.Author.When.Date.ToString("d", new CultureInfo("da-DK"));
                     commitDate = commitDate.Replace(".", "-");
                     if(commitDict.ContainsKey(commitDate)) {
                         commitDict[commitDate] += 1;
@@ -65,7 +67,7 @@ public class Program{
 
         foreach(Commit a in commits){
             var commitName = a.Committer.Name;
-            var commitDate = a.Author.When.Date.ToShortDateString().ToString();
+            var commitDate = a.Author.When.Date.ToString("d", new CultureInfo("da-DK"));
             commitDate = commitDate.Replace(".", "-");
 
             Dictionary<String, int> currentDict;
