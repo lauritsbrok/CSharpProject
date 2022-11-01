@@ -33,7 +33,7 @@ public class UnitTest1
         var actual = Program.CommitFrequencyMode(path);
     
         // Assert
-        excepted.Should().BeEquivalentTo(actual);
+        actual.Should().BeEquivalentTo(excepted);
     }
 
     [Fact]
@@ -67,6 +67,6 @@ public class UnitTest1
         var actual = Program.CommitAuthorMode(path);
     
         // Assert
-        expected.Should().BeEquivalentTo(actual);
+        actual.Should().BeEquivalentTo(expected);
     }
 }
