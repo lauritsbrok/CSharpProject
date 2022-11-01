@@ -1,7 +1,6 @@
 namespace Application.Tests;
 
 using System.IO.Compression;
-using LibGit2Sharp;
 using Program;
 
 public class UnitTest1
@@ -12,7 +11,7 @@ public class UnitTest1
         if(!Directory.Exists("../../../../extracted")){
             ZipFile.ExtractToDirectory("../../../../assignment-05.zip", "../../../../extracted");
         }
-        path = "../../../../extracted/assignment-05";
+        path = "../../../../small_repo";
     }
 
     [Fact]
