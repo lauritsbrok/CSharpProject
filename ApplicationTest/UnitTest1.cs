@@ -8,7 +8,7 @@ public class UnitTest1
     String path;
 
     public UnitTest1(){
-        path = "../../../../assignment-05.git";
+        path = "../../../../assignment-05";
     }
 
     [Fact]

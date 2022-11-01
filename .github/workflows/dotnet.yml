@@ -37,4 +37,7 @@ jobs:
 
       - name: Test
         run: dotnet test
+
+      - name: Unpack
+        run: unzip assignment-05
         
