@@ -8,6 +8,9 @@ public class UnitTest1
     String path;
 
     public UnitTest1(){
+        if(!Directory.Exists("../../../../assignment-05")){
+            ZipFile.ExtractToDirectory("../../../../assignment-05.zip", "../../../../");
+        }
         path = "../../../../assignment-05";
     }
 
