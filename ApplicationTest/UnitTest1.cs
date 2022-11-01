@@ -1,15 +1,24 @@
 namespace Application.Tests;
 
+using System.IO.Compression;
 using LibGit2Sharp;
 using Program;
 
 public class UnitTest1
 {
+    String path;
+
+    public UnitTest1(){
+        if(!Directory.Exists("../../../../extracted")){
+            ZipFile.ExtractToDirectory("../../../../assignment-05.zip", "../../../../extracted");
+        }
+        path = "../../../../extracted/assignment-05";
+    }
+
     [Fact]
     public void TestCommitFrequencyMode()
     {
         // Arrange
-        var path = "../../../../assignment-05";
         var excepted = new List<String>() {
             "3 11-10-2022",
             "2 07-10-2022",
@@ -59,7 +68,6 @@ public class UnitTest1
         expected.Add("GitHub Enterprise", datecommits5);
 
         // Act
-        var path = "../../../../assignment-05";
         var actual = Program.CommitAuthorMode(path);
     
         // Assert
