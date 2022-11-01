@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+#Generated repo from zip
+assignment-05.zip/
+__MACOSX/
+assignment-05/
