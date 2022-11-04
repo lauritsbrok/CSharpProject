@@ -1,12 +1,16 @@
-using Microsoft.EntityFrameworkCore;
 
-public class GitInsightContext : DbContext
+
+public sealed class GitInsightContext : DbContext
 {
     public DbSet<Repo> Repos => Set<Repo>();
     public DbSet<Author> Authors => Set<Author>();
-    public DbSet<Commit> Commits => Set<Commit>();
+    public DbSet<GitCommit> Commits => Set<GitCommit>();
 
     public GitInsightContext(DbContextOptions<GitInsightContext> options) : base(options){}
+
+    public GitInsightContext()
+    {
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

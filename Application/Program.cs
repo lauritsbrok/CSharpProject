@@ -32,7 +32,6 @@ public class Program{
             break;
         }
     }
-
     public static IEnumerable<String> CommitFrequencyMode(String path){
         if(Repository.IsValid(path)){
             var commitDict = new Dictionary<String, int>();

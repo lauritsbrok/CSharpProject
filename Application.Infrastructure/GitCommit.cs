@@ -1,6 +1,6 @@
-public class Commit
+public class GitCommit
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     public string Message { get; set; }
     public Author Author { get; set; }

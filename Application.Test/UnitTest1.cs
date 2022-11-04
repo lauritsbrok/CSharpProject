@@ -1,6 +1,7 @@
 namespace Application.Tests;
 
 using System.IO.Compression;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Program;
 
 public class UnitTest1
@@ -72,4 +73,5 @@ public class UnitTest1
         // Assert
         actual.Should().BeEquivalentTo(expected);
     }
+
 }
