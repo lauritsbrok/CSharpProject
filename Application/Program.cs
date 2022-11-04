@@ -1,10 +1,16 @@
-﻿using System.Globalization;
-
-namespace Program;
+﻿namespace Program;
 
 public class Program{
 
     public static void Main(String[] args){
+
+
+        /////////////////
+
+        NPGSQL.doStuff(NPGSQL.CreateDataSource());
+        return;
+        /////////////////
+
         Console.WriteLine("Enter github repo path");
         var path = Console.ReadLine();
         Console.WriteLine("Choose desired info");
@@ -44,8 +50,7 @@ public class Program{
                     .Select(x => x.First())
                     .ToArray();
                 foreach (var commit in commits) {
-                    var commitDate = commit.Author.When.Date.ToString("d", new CultureInfo("da-DK"));
-                    commitDate = commitDate.Replace(".", "-");
+                    var commitDate = commit.Author.When.Date.ToString().Replace(" 00.00.00", "").Replace(".", "-");
                     if(commitDict.ContainsKey(commitDate)) {
                         commitDict[commitDate] += 1;
                     } else {
@@ -67,8 +72,7 @@ public class Program{
 
         foreach(Commit a in commits){
             var commitName = a.Committer.Name;
-            var commitDate = a.Author.When.Date.ToString("d", new CultureInfo("da-DK"));
-            commitDate = commitDate.Replace(".", "-");
+            var commitDate = a.Committer.When.Date.ToString().Replace(" 00.00.00", "").Replace(".", "-");
 
             Dictionary<String, int> currentDict;
             if(!commitsByNameAndDateAndCount.TryGetValue(commitName, out currentDict)){
