@@ -9,28 +9,82 @@ public class AuthorRepository : IAuthorRepository
         _context = context;
     }
 
-    public (Response Response, int AuthorId) Create(AuthorCreateDTO user)
+    public (Response Response, int AuthorId) Create(AuthorCreateDTO author)
     {
-        throw new NotImplementedException();
+        var entity = _context.Authors.FirstOrDefault(a => a.Name == author.Name);
+        Response response;
+        if(entity is null) {
+            entity = new Author(author.Name, author.Email);
+            try
+            {
+                _context.Authors.Add(entity);
+                _context.SaveChanges();
+                response = Response.Created;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                entity = _context.Authors.FirstOrDefault(a => a.Email == author.Email);
+                response = Response.Conflict;
+            }
+        } else {
+            response = Response.Conflict;
+        }
+        return (response, entity!.Id);
     }
 
     public Response Delete(int authorId, bool force = false)
     {
-        throw new NotImplementedException();
+        var entity = _context.Authors.FirstOrDefault(u => u.Id == authorId);
+        Response response;
+        if(entity != null && (entity.commits.Count == 0 || force)) {
+            _context.Authors.Remove(entity);
+            _context.SaveChanges();
+            response = Response.Deleted;
+
+        } else {
+            response = Response.Conflict;
+        }
+
+        return response;
     }
 
     public AuthorDTO? Find(int authorId)
     {
-        throw new NotImplementedException();
+        var Author = from u in _context.Authors
+                     where u.Id == authorId
+                     select new AuthorDTO(u.Id, u.Name, u.Email);
+        return Author.FirstOrDefault();
     }
 
     public IReadOnlyCollection<AuthorDTO> Read()
     {
-        throw new NotImplementedException();
+        var Authors = 
+            from u in _context.Authors
+            orderby u.Name
+            select new AuthorDTO(u.Id, u.Name, u.Email);
+
+        return Authors.ToArray();
     }
 
     public Response Update(AuthorUpdateDTO author)
     {
-        throw new NotImplementedException();
+        var entity = _context.Authors.FirstOrDefault(u => u.Id == author.Id);
+        Response response;
+        if(entity == null) {
+            response = Response.NotFound;
+        } else {
+            entity.Name = author.Name;
+            entity.Email = author.Email;
+            try
+            {
+                _context.SaveChanges();
+                response = Response.Updated;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                response = Response.Conflict;
+            }
+        }
+        return response;
     }
 }
