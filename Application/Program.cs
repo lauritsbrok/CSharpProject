@@ -62,6 +62,7 @@ public class Program{
     public static Dictionary<String, Dictionary<String, int>> CommitAuthorMode(String path){
         var repo = new Repository(path);
         var commits = repo.Commits;
+        Console.WriteLine(repo.Network.Remotes.First().Url);
 
         var commitsByNameAndDateAndCount = new Dictionary<String, Dictionary<String, int>>();
 

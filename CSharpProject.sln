@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{34CAE91A-DDEC-4A74-9694-9EEBD072D2C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationTest", "ApplicationTest\ApplicationTest.csproj", "{CA87DEED-F36B-4509-BFAA-75DB686BBB5B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Infrastructure", "Application.Infrastructure\Application.Infrastructure.csproj", "{F97F03D3-40B2-49CF-AADC-3488FF24ED3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Core", "Application.Core\Application.Core.csproj", "{223C4545-EAF3-4629-98FB-EF114207BFF2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Infrastructure.Test", "Application.Infrastructure.Test\Application.Infrastructure.Test.csproj", "{6079EE94-DE9D-4BB8-AF6E-B8A259024377}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Test", "Application.Test\Application.Test.csproj", "{4AB0C355-08A8-4962-BA64-C8305398EAE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +42,9 @@ Global
 		{6079EE94-DE9D-4BB8-AF6E-B8A259024377}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6079EE94-DE9D-4BB8-AF6E-B8A259024377}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6079EE94-DE9D-4BB8-AF6E-B8A259024377}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AB0C355-08A8-4962-BA64-C8305398EAE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AB0C355-08A8-4962-BA64-C8305398EAE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AB0C355-08A8-4962-BA64-C8305398EAE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AB0C355-08A8-4962-BA64-C8305398EAE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
