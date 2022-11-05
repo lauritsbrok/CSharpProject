@@ -1,8 +1,8 @@
-public class RepoRepository : IRepoRepository
+public class GitRepoRepository : IRepoRepository
 {
     private readonly GitInsightContext _context;
 
-    public RepoRepository(GitInsightContext context)
+    public GitRepoRepository(GitInsightContext context)
     {
         _context = context;
     }

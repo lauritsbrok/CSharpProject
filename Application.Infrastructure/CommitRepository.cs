@@ -1,10 +1,10 @@
 namespace Application.Infrastructure;
 
-public class CommitRepository : ICommitRepository
+public class GitCommitRepository : ICommitRepository
 {
     private readonly GitInsightContext _context;
 
-    public CommitRepository(GitInsightContext context)
+    public GitCommitRepository(GitInsightContext context)
     {
         _context = context;
     }
