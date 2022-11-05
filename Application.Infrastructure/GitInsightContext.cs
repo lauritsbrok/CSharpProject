@@ -17,5 +17,8 @@ public sealed class GitInsightContext : DbContext
         modelBuilder.Entity<GitAuthor>()
                     .HasIndex(a => a.Email)
                     .IsUnique();
+        modelBuilder.Entity<GitAuthor>()
+                    .HasIndex(a => a.Name)
+                    .IsUnique();
     }
 }

@@ -2,6 +2,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class GitCommit
 {
+    public GitCommit(string id, string message)
+    {
+        Id = id;
+        Message = message;
+    }
+
     [Key]
     public string Id { get; set; }
 
