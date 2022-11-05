@@ -1,6 +1,6 @@
 namespace Application.Infrastructure;
 
-public class GitCommitRepository : ICommitRepository
+public class GitCommitRepository : IGitCommitRepository
 {
     private readonly GitInsightContext _context;
 
@@ -9,7 +9,7 @@ public class GitCommitRepository : ICommitRepository
         _context = context;
     }
 
-    public (Response Response, int CommitId) Create(CommitCreateDTO commit)
+    public (Response Response, int CommitId) Create(GitCommitCreateDTO commit)
     {
         throw new NotImplementedException();
     }
@@ -19,17 +19,17 @@ public class GitCommitRepository : ICommitRepository
         throw new NotImplementedException();
     }
 
-    public CommitDTO? Find(int commitId)
+    public GitCommitDTO? Find(int commitId)
     {
         throw new NotImplementedException();
     }
 
-    public IReadOnlyCollection<CommitDTO> Read()
+    public IReadOnlyCollection<GitCommitDTO> Read()
     {
         throw new NotImplementedException();
     }
 
-    public Response Update(CommitUpdateDTO commit)
+    public Response Update(GitCommitUpdateDTO commit)
     {
         throw new NotImplementedException();
     }

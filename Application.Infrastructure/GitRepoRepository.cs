@@ -1,4 +1,4 @@
-public class GitRepoRepository : IRepoRepository
+public class GitRepoRepository : IGitRepoRepository
 {
     private readonly GitInsightContext _context;
 
@@ -7,7 +7,7 @@ public class GitRepoRepository : IRepoRepository
         _context = context;
     }
 
-    public (Response Response, int RepoId) Create(RepoCreateDTO repo)
+    public (Response Response, int RepoId) Create(GitRepoCreateDTO repo)
     {
         throw new NotImplementedException();
     }
@@ -17,17 +17,17 @@ public class GitRepoRepository : IRepoRepository
         throw new NotImplementedException();
     }
 
-    public RepoDTO? Find(int repoId)
+    public GitRepoDTO? Find(int repoId)
     {
         throw new NotImplementedException();
     }
 
-    public IReadOnlyCollection<RepoDTO> Read()
+    public IReadOnlyCollection<GitRepoDTO> Read()
     {
         throw new NotImplementedException();
     }
 
-    public Response Update(RepoDTO repo)
+    public Response Update(GitRepoDTO repo)
     {
         throw new NotImplementedException();
     }

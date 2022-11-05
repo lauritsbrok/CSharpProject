@@ -3,13 +3,13 @@ using Application.Infrastructure;
 
 namespace Assignment.Infrastructure.Tests;
 
-public class AuthorRepositoryTests
+public class GitAuthorRepositoryTests
 {
     private readonly SqliteConnection _connection;
     private readonly GitInsightContext _context;
     private readonly GitAuthorRepository _repository;
     
-    public AuthorRepositoryTests()
+    public GitAuthorRepositoryTests()
     {
         _connection = new SqliteConnection("Filename=:memory:");
         _connection.Open();
@@ -30,7 +30,7 @@ public class AuthorRepositoryTests
     [Fact]
     public void Create()
     {
-        var (response, createdId) = _repository.Create(new AuthorCreateDTO("Lisa", "lisa@mail.com"));
+        var (response, createdId) = _repository.Create(new GitAuthorCreateDTO("Lisa", "lisa@mail.com"));
 
         response.Should().Be(Response.Created);
 
@@ -50,21 +50,21 @@ public class AuthorRepositoryTests
     }
 
     [Fact]
-    public void Find() => _repository.Find(2).Should().Be(new AuthorDTO(2, "Tim", "tim@mail.com"));
+    public void Find() => _repository.Find(2).Should().Be(new GitAuthorDTO(2, "Tim", "tim@mail.com"));
 
     [Fact]
     public void Find_Non_Existing() => _repository.Find(42).Should().BeNull();
 
     [Fact]
-    public void Read() => _repository.Read().Should().BeEquivalentTo(new[] { new AuthorDTO(1, "Bob", "bob@mail.com"), new AuthorDTO(2, "Tim", "tim@mail.com") });
+    public void Read() => _repository.Read().Should().BeEquivalentTo(new[] { new GitAuthorDTO(1, "Bob", "bob@mail.com"), new GitAuthorDTO(2, "Tim", "tim@mail.com") });
 
     [Fact]
-    public void Update_Non_Existing() => _repository.Update(new AuthorUpdateDTO(42, "Tim", "tim@mail.com")).Should().Be(NotFound);
+    public void Update_Non_Existing() => _repository.Update(new GitAuthorUpdateDTO(42, "Tim", "tim@mail.com")).Should().Be(NotFound);
 
     [Fact]
     public void Update_Conflict()
     {
-        var response = _repository.Update(new AuthorUpdateDTO(2, "Bob", "bob@mail.com"));
+        var response = _repository.Update(new GitAuthorUpdateDTO(2, "Bob", "bob@mail.com"));
 
         response.Should().Be(Conflict);
 
@@ -76,7 +76,7 @@ public class AuthorRepositoryTests
     [Fact]
     public void Update()
     {
-        var response = _repository.Update(new AuthorUpdateDTO(2, "Timmy", "timmy@gmail.com"));
+        var response = _repository.Update(new GitAuthorUpdateDTO(2, "Timmy", "timmy@gmail.com"));
 
         response.Should().Be(Updated);
 

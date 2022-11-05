@@ -1,6 +1,6 @@
 namespace Application.Infrastructure;
 
-public class GitAuthorRepository : IAuthorRepository
+public class GitAuthorRepository : IGitAuthorRepository
 {
     private readonly GitInsightContext _context;
 
@@ -9,7 +9,7 @@ public class GitAuthorRepository : IAuthorRepository
         _context = context;
     }
 
-    public (Response Response, int AuthorId) Create(AuthorCreateDTO author)
+    public (Response Response, int AuthorId) Create(GitAuthorCreateDTO author)
     {
         var entity = _context.Authors.FirstOrDefault(a => a.Name == author.Name);
         Response response;
@@ -48,25 +48,25 @@ public class GitAuthorRepository : IAuthorRepository
         return response;
     }
 
-    public AuthorDTO? Find(int authorId)
+    public GitAuthorDTO? Find(int authorId)
     {
         var Author = from u in _context.Authors
                      where u.Id == authorId
-                     select new AuthorDTO(u.Id, u.Name, u.Email);
+                     select new GitAuthorDTO(u.Id, u.Name, u.Email);
         return Author.FirstOrDefault();
     }
 
-    public IReadOnlyCollection<AuthorDTO> Read()
+    public IReadOnlyCollection<GitAuthorDTO> Read()
     {
         var Authors = 
             from u in _context.Authors
             orderby u.Name
-            select new AuthorDTO(u.Id, u.Name, u.Email);
+            select new GitAuthorDTO(u.Id, u.Name, u.Email);
 
         return Authors.ToArray();
     }
 
-    public Response Update(AuthorUpdateDTO author)
+    public Response Update(GitAuthorUpdateDTO author)
     {
         var entity = _context.Authors.FirstOrDefault(u => u.Id == author.Id);
         Response response;
