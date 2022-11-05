@@ -7,7 +7,7 @@ public class AuthorRepositoryTests
 {
     private readonly SqliteConnection _connection;
     private readonly GitInsightContext _context;
-    private readonly AuthorRepository _repository;
+    private readonly GitAuthorRepository _repository;
     
     public AuthorRepositoryTests()
     {
@@ -17,14 +17,14 @@ public class AuthorRepositoryTests
         _context = new GitInsightContext(builder.Options);
         _context.Database.EnsureCreated();
 
-        var bob = new Author("Bob", "bob@mail.com") {Id = 1};
+        var bob = new GitAuthor("Bob", "bob@mail.com") {Id = 1};
 
-        var tim = new Author("Tim", "tim@mail.com") {Id = 2};
+        var tim = new GitAuthor("Tim", "tim@mail.com") {Id = 2};
 
         _context.Authors.AddRange(bob, tim);
         _context.SaveChanges();
 
-        _repository = new AuthorRepository(_context);
+        _repository = new GitAuthorRepository(_context);
     }
 
     [Fact]

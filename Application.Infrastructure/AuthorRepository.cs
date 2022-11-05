@@ -1,10 +1,10 @@
 namespace Application.Infrastructure;
 
-public class AuthorRepository : IAuthorRepository
+public class GitAuthorRepository : IAuthorRepository
 {
     private readonly GitInsightContext _context;
 
-    public AuthorRepository(GitInsightContext context)
+    public GitAuthorRepository(GitInsightContext context)
     {
         _context = context;
     }
@@ -14,7 +14,7 @@ public class AuthorRepository : IAuthorRepository
         var entity = _context.Authors.FirstOrDefault(a => a.Name == author.Name);
         Response response;
         if(entity is null) {
-            entity = new Author(author.Name, author.Email);
+            entity = new GitAuthor(author.Name, author.Email);
             try
             {
                 _context.Authors.Add(entity);

@@ -1,6 +1,6 @@
-public class Author
+public class GitAuthor
 {
-    public Author(string name, string email)
+    public GitAuthor(string name, string email)
     {
         Name = name;
         Email = email;

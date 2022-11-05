@@ -2,8 +2,8 @@
 
 public sealed class GitInsightContext : DbContext
 {
-    public DbSet<Repo> Repos => Set<Repo>();
-    public DbSet<Author> Authors => Set<Author>();
+    public DbSet<GitRepo> Repos => Set<GitRepo>();
+    public DbSet<GitAuthor> Authors => Set<GitAuthor>();
     public DbSet<GitCommit> Commits => Set<GitCommit>();
 
     public GitInsightContext(DbContextOptions<GitInsightContext> options) : base(options){}
@@ -14,8 +14,8 @@ public sealed class GitInsightContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Author>()
-                    .HasIndex(i => i.Email)
+        modelBuilder.Entity<GitAuthor>()
+                    .HasIndex(a => a.Email)
                     .IsUnique();
     }
 }
