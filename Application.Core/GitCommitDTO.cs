@@ -1,7 +1,7 @@
 namespace Application.Core;
 
-public record GitCommitDTO(string Id, string message, string authorName, string repoUrl);
+public record GitCommitDTO(string Id, string Message, string AuthorName, string RepoUrl);
 
-public record GitCommitCreateDTO(string Name, string authorName, string repoUrl);
+public record GitCommitCreateDTO(string Name, string AuthorName, string RepoUrl);
 
-public record GitCommitUpdateDTO(string Id, string message, string authorName, string repoUrl);
+public record GitCommitUpdateDTO(string Id, string Message, string AuthorName, string RepoUrl);

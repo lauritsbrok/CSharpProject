@@ -54,8 +54,8 @@ public class GitRepoRepository : IGitRepoRepository
     {
         var Repo = from r in _context.Repos
                      where r.Id == repoId
-                     let commits = r.Commits.Select(c => c.Id).ToHashSet()
-                     let authors = r.Authors.Select(a => a.Name).ToHashSet()
+                     let commits = r.Commits.Select(c => new GitCommitDTO(c.Id, c.Message, c.Author.Name, c.Repo.Url)).ToHashSet()
+                     let authors = r.Authors.Select(a => new GitAuthorDTO(a.Id, a.Name, a.Email)).ToHashSet()
                      select new GitRepoDTO(r.Id, r.Url, commits, authors);
         return Repo.FirstOrDefault();
     }
@@ -65,8 +65,8 @@ public class GitRepoRepository : IGitRepoRepository
         var Repos = 
             from r in _context.Repos
             orderby r.Id
-            let commits = r.Commits.Select(c => c.Id).ToHashSet()
-            let authors = r.Authors.Select(a => a.Name).ToHashSet()
+            let commits = r.Commits.Select(c => new GitCommitDTO(c.Id, c.Message, c.Author.Name, c.Repo.Url)).ToHashSet()
+            let authors = r.Authors.Select(a => new GitAuthorDTO(a.Id, a.Name, a.Email)).ToHashSet()
             select new GitRepoDTO(r.Id, r.Url, commits, authors);
 
         return Repos.ToArray();
@@ -82,8 +82,8 @@ public class GitRepoRepository : IGitRepoRepository
         }
             entity.Id = repo.Id;
             entity.Url = repo.Url;
-            entity.Authors = UpdateAuthor(repo.Authors).ToHashSet();
-            entity.Commits = UpdateCommits(repo.Commits).ToHashSet();
+            entity.Authors = CreateOrUpdateAuthor(repo.Authors).ToHashSet();
+            entity.Commits = CreateOrUpdateCommits(repo.Commits).ToHashSet();
 
             _context.SaveChangesAsync();
 
@@ -91,25 +91,23 @@ public class GitRepoRepository : IGitRepoRepository
         
     }
 
-    private IEnumerable<GitCommit> UpdateCommits(IEnumerable<string> commitIds)
+    private IEnumerable<GitCommit> CreateOrUpdateCommits(IEnumerable<GitCommitDTO> commits)
     {
-        var existing = _context.Commits.Where(c => commitIds.Contains(c.Id)).ToDictionary(c => c.Id);
-        foreach (var commit in commitIds)
-        {
-            existing.TryGetValue(commit, out var foundCommit);
+        var existing = new Dictionary<int, GitAuthor>();
+        foreach (var commit in commits) {
+            var foundCommit = _context.Commits.Where(c => c.Id == commit.Id).FirstOrDefault();
 
-            yield return foundCommit!;
+            yield return foundCommit ?? new GitCommit(commit.Id, commit.Message);
         }
     }
 
-    private IEnumerable<GitAuthor> UpdateAuthor(IEnumerable<string> authorNames)
+    private IEnumerable<GitAuthor> CreateOrUpdateAuthor(IEnumerable<GitAuthorDTO> authors)
     {
-        var existing = _context.Authors.Where(a => authorNames.Contains(a.Name)).ToDictionary(a => a.Name);
-        foreach (var author in authorNames)
-        {
-            existing.TryGetValue(author, out var foundAuthor);
+        var existing = new Dictionary<int, GitAuthor>();
+        foreach (var author in authors) {
+            var foundAuthor = _context.Authors.Where(a => a.Id == author.Id).FirstOrDefault();
 
-            yield return foundAuthor!;
+            yield return foundAuthor ?? new GitAuthor(author.Name, author.Email);
         }
     }
 }

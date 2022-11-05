@@ -96,12 +96,12 @@ public class GitRepoRepositoryTests : IDisposable
     [Fact]
     public void Read() {
         var read = _repository.Read();
-        var emptyRepoCommits = new HashSet<string>();
-        var emptyRepoAuthors = new HashSet<string>();
-        var NotEmptyGitRepoCommits = new HashSet<string>();
-        var NotEmptyGitRepoAuthors = new HashSet<string>();
+        var emptyRepoCommits = new HashSet<GitCommitDTO>();
+        var emptyRepoAuthors = new HashSet<GitAuthorDTO>();
+        var NotEmptyGitRepoCommits = new HashSet<GitCommitDTO>();
+        var NotEmptyGitRepoAuthors = new HashSet<GitAuthorDTO>();
         foreach (var author in NotEmptyGitRepo.Authors) {
-            NotEmptyGitRepoAuthors.Add(author.Name);
+            NotEmptyGitRepoAuthors.Add(new GitAuthorDTO(author.Id, author.Name, author.Email));
         }
         var expected = new [] {new GitRepoDTO(EmptyGitRepo.Id, EmptyGitRepo.Url, emptyRepoCommits, emptyRepoAuthors), new GitRepoDTO(NotEmptyGitRepo.Id, NotEmptyGitRepo.Url, NotEmptyGitRepoCommits, NotEmptyGitRepoAuthors) };
         read.Should().BeEquivalentTo(expected);
@@ -109,25 +109,24 @@ public class GitRepoRepositoryTests : IDisposable
 
     [Fact]
     public void Update_Non_Existing_Repo_Return_NotFound() {
-        var NotExistingRepo = new GitRepoDTO(3, "NotExistingRepo.test", new HashSet<string>(), new HashSet<string>());
+        var NotExistingRepo = new GitRepoDTO(3, "NotExistingRepo.test", new HashSet<GitCommitDTO>(), new HashSet<GitAuthorDTO>());
         var response = _repository.Update(NotExistingRepo);
         response.Should().Be(NotFound);
     } 
 
     [Fact]
     public void Update_Repo_Return_Updated() {
-        // var ExistingRepo = NotEmptyGitRepo;
-        // var newAuthor = new GitAuthor("updateAuthor", "update@update.dk");
-        // ExistingRepo.Authors.Add(new GitAuthor("updateAuthor", "update@update.dk"));
-        // var NotEmptyGitRepoAuthors = new HashSet<string>();
-        // var NotEmptyGitRepoCommits = new HashSet<string>();
-        // foreach (var author in ExistingRepo.Authors) {
-
-        // }
-        // var response = _repository.Update(new GitRepoDTO(ExistingRepo.Id, ExistingRepo.Url, NotEmptyGitRepoCommits, NotEmptyGitRepoAuthors));
-        // var updateRepoDTO = _repository.Find(2);
-        // response.Should().Be(Updated);
-        // updateRepoDTO!.Authors.Should().Contain("updateAuthor");
+        var ExistingRepo = NotEmptyGitRepo;
+        ExistingRepo.Authors.Add(new GitAuthor("updateAuthor", "update@update.dk") {Id = 2});
+        var NotEmptyGitRepoAuthors = new HashSet<GitAuthorDTO>();
+        var NotEmptyGitRepoCommits = new HashSet<GitCommitDTO>();
+        foreach (var author in ExistingRepo.Authors) {
+            NotEmptyGitRepoAuthors.Add(new GitAuthorDTO(author.Id, author.Name, author.Email));
+        }
+        var response = _repository.Update(new GitRepoDTO(ExistingRepo.Id, ExistingRepo.Url, NotEmptyGitRepoCommits, NotEmptyGitRepoAuthors));
+        var updateRepoDTO = _repository.Find(2);
+        response.Should().Be(Updated);
+        updateRepoDTO!.Authors.Should().BeEquivalentTo(NotEmptyGitRepoAuthors);
     } 
 
     public void Dispose()
