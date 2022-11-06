@@ -12,14 +12,13 @@ public class GitRepoRepository : IGitRepoRepository
         var entity = _context.Repos.FirstOrDefault(r => r.Url == repo.Url);
         Response response;
         if(entity is null) {
-            entity = new GitRepo(repo.Url);
-            try {
-                _context.Repos.Add(entity);
-                _context.SaveChanges();
-                response = Response.Created;
-            } catch (Microsoft.EntityFrameworkCore.DbUpdateException) {
-                response = Response.Conflict;
-            }
+            entity = new GitRepo(repo.Url){
+                Commits = CreateOrUpdateCommits(repo.Commits!).ToHashSet(),
+                Authors = CreateOrUpdateAuthors(repo.Authors!).ToHashSet()
+            };
+            _context.Repos.Add(entity);
+            _context.SaveChanges();
+            response = Response.Created;
         } else {
             response = Response.Conflict;
         }
@@ -34,13 +33,9 @@ public class GitRepoRepository : IGitRepoRepository
         if(entity != null) {
             var repoIsEmpty = entity.Authors.Count == 0 && entity.Commits.Count == 0;
             if(force || repoIsEmpty) {
-                try {
                 _context.Repos.Remove(entity);
                 _context.SaveChanges();
                 response = Response.Deleted;
-            } catch (Microsoft.EntityFrameworkCore.DbUpdateException) {
-                response = Response.Conflict;
-            }
             } else {
                 response = Response.Conflict;
             }
@@ -82,7 +77,7 @@ public class GitRepoRepository : IGitRepoRepository
         }
             entity.Id = repo.Id;
             entity.Url = repo.Url;
-            entity.Authors = CreateOrUpdateAuthor(repo.Authors).ToHashSet();
+            entity.Authors = CreateOrUpdateAuthors(repo.Authors).ToHashSet();
             entity.Commits = CreateOrUpdateCommits(repo.Commits).ToHashSet();
 
             _context.SaveChangesAsync();
@@ -101,7 +96,7 @@ public class GitRepoRepository : IGitRepoRepository
         }
     }
 
-    private IEnumerable<GitAuthor> CreateOrUpdateAuthor(IEnumerable<GitAuthorDTO> authors)
+    private IEnumerable<GitAuthor> CreateOrUpdateAuthors(IEnumerable<GitAuthorDTO> authors)
     {
         var existing = new Dictionary<int, GitAuthor>();
         foreach (var author in authors) {

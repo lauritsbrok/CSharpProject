@@ -6,6 +6,7 @@ public class GitAuthor
         Email = email;
         commits = new HashSet<GitCommit>();
     }
+
     [Key]
     public int Id { get; set; }
 

@@ -9,17 +9,17 @@ public class GitCommitRepository : IGitCommitRepository
         _context = context;
     }
 
-    public (Response Response, int CommitId) Create(GitCommitCreateDTO commit)
+    public (Response Response, string CommitId) Create(GitCommitCreateDTO commit)
     {
         throw new NotImplementedException();
     }
 
-    public Response Delete(int commitId, bool force = false)
+    public Response Delete(string commitId, bool force = false)
     {
         throw new NotImplementedException();
     }
 
-    public GitCommitDTO? Find(int commitId)
+    public GitCommitDTO? Find(string commitId)
     {
         throw new NotImplementedException();
     }

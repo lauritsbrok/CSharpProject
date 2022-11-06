@@ -1,9 +1,8 @@
-
 using Application.Infrastructure;
 
 namespace Assignment.Infrastructure.Tests;
 
-public class GitAuthorRepositoryTests
+public class GitAuthorRepositoryTests : IDisposable
 {
     private readonly SqliteConnection _connection;
     private readonly GitInsightContext _context;
@@ -83,5 +82,11 @@ public class GitAuthorRepositoryTests
         var entity = _context.Authors.Find(2)!;
 
         entity.Name.Should().Be("Timmy");
+    }
+
+    public void Dispose()
+    {
+        _context.Dispose();
+        _connection.Close();
     }
 }

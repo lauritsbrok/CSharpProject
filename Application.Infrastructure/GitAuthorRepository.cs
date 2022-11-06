@@ -15,17 +15,9 @@ public class GitAuthorRepository : IGitAuthorRepository
         Response response;
         if(entity is null) {
             entity = new GitAuthor(author.Name, author.Email);
-            try
-            {
-                _context.Authors.Add(entity);
-                _context.SaveChanges();
-                response = Response.Created;
-            }
-            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
-            {
-                entity = _context.Authors.FirstOrDefault(a => a.Email == author.Email);
-                response = Response.Conflict;
-            }
+            _context.Authors.Add(entity);
+            _context.SaveChanges();
+            response = Response.Created;
         } else {
             response = Response.Conflict;
         }
