@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Infrastructure.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.Test", "Application.Test\Application.Test.csproj", "{4AB0C355-08A8-4962-BA64-C8305398EAE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "restapi", "restapi\restapi.csproj", "{989A7C8B-175D-4411-9894-6DD9CE0A7444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,5 +52,9 @@ Global
 		{9105F58A-BE35-4A21-9497-FCABAA778E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9105F58A-BE35-4A21-9497-FCABAA778E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9105F58A-BE35-4A21-9497-FCABAA778E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{989A7C8B-175D-4411-9894-6DD9CE0A7444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{989A7C8B-175D-4411-9894-6DD9CE0A7444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{989A7C8B-175D-4411-9894-6DD9CE0A7444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{989A7C8B-175D-4411-9894-6DD9CE0A7444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
