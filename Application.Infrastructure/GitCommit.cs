@@ -2,14 +2,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class GitCommit
 {
-    public GitCommit(string id, string message)
+    public GitCommit(string commitHash, string message)
     {
-        Id = id;
+        CommitHash = commitHash;
         Message = message;
     }
 
     [Key]
-    public string Id { get; set; }
+    public int Id { get; set; }
+
+    [Required(ErrorMessage = "CommitHash is required.")]
+    public string CommitHash { get; set; }
 
     public string Message { get; set; }
 

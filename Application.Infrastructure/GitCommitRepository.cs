@@ -9,28 +9,66 @@ public class GitCommitRepository : IGitCommitRepository
         _context = context;
     }
 
-    public (Response Response, string CommitId) Create(GitCommitCreateDTO commit)
+    public (Response Response, int Id) Create(GitCommitCreateDTO commit)
     {
-        throw new NotImplementedException();
+        var entity = _context.Commits.FirstOrDefault(c => c.CommitHash == commit.commitId);
+        Response response;
+        if(entity is null) {
+            entity = new GitCommit(commit.commitId, commit.Message);
+            entity.Author = CreateOrUpdateAuthor(commit.Author);
+            entity.Repo = CreateOrUpdateRepo(commit.RepoUrl);
+            _context.Commits.Add(entity);
+            _context.SaveChanges();
+            response = Response.Created;
+        } else {
+            response = Response.Conflict;
+        }
+        return (response, entity!.Id);
     }
 
     public Response Delete(string commitId, bool force = false)
     {
-        throw new NotImplementedException();
+        Response response;
+        var entity = _context.Commits.FirstOrDefault(c => c.CommitHash == commitId);
+        if(entity != null && force) {
+            _context.Commits.Remove(entity);
+            _context.SaveChanges();
+            response = Response.Deleted;
+        } else {
+            response = Response.Conflict;
+        }
+
+        return response;
     }
 
     public GitCommitDTO? Find(string commitId)
     {
-        throw new NotImplementedException();
+        var commit = from c in _context.Commits
+                     where c.CommitHash == commitId
+                     select new GitCommitDTO(c.CommitHash, c.Message, c.Author.Name, c.Repo.Url);
+        return commit.FirstOrDefault();
     }
 
     public IReadOnlyCollection<GitCommitDTO> Read()
     {
-        throw new NotImplementedException();
+        var Commits = 
+            from c in _context.Commits
+            orderby c.CommitHash
+            select new GitCommitDTO(c.CommitHash, c.Message, c.Author.Name, c.Repo.Url);
+
+        return Commits.ToArray();
     }
 
-    public Response Update(GitCommitUpdateDTO commit)
+
+    private GitAuthor CreateOrUpdateAuthor(GitAuthorDTO author)
     {
-        throw new NotImplementedException();
+        var foundAuthor = _context.Authors.Where(a => a.Email == author.Email).FirstOrDefault();
+        return foundAuthor ?? new GitAuthor(author.Name, author.Email);
+    }
+
+    private GitRepo CreateOrUpdateRepo(string repoUrl)
+    {
+        var foundRepo = _context.Repos.Where(r => r.Url == repoUrl).FirstOrDefault();
+        return foundRepo ?? new GitRepo(repoUrl);
     }
 }
