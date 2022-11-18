@@ -99,7 +99,7 @@ public class GitRepoRepositoryTests : IDisposable
         var NotEmptyGitRepoCommits = new HashSet<GitCommitDTO>();
         var NotEmptyGitRepoAuthors = new HashSet<GitAuthorDTO>();
         foreach (var author in NotEmptyGitRepo.Authors) {
-            NotEmptyGitRepoAuthors.Add(new GitAuthorDTO(author.Id, author.Name, author.Email));
+            NotEmptyGitRepoAuthors.Add(new GitAuthorDTO(author.Name, author.Email));
         }
         var expected = new [] {new GitRepoDTO(EmptyGitRepo.Id, EmptyGitRepo.Url, emptyRepoCommits, emptyRepoAuthors), new GitRepoDTO(NotEmptyGitRepo.Id, NotEmptyGitRepo.Url, NotEmptyGitRepoCommits, NotEmptyGitRepoAuthors) };
         read.Should().BeEquivalentTo(expected);
@@ -119,7 +119,7 @@ public class GitRepoRepositoryTests : IDisposable
         var NotEmptyGitRepoAuthors = new HashSet<GitAuthorDTO>();
         var NotEmptyGitRepoCommits = new HashSet<GitCommitDTO>();
         foreach (var author in ExistingRepo.Authors) {
-            NotEmptyGitRepoAuthors.Add(new GitAuthorDTO(author.Id, author.Name, author.Email));
+            NotEmptyGitRepoAuthors.Add(new GitAuthorDTO(author.Name, author.Email));
         }
         var response = _repository.Update(new GitRepoDTO(ExistingRepo.Id, ExistingRepo.Url, NotEmptyGitRepoCommits, NotEmptyGitRepoAuthors));
         var updateRepoDTO = _repository.Find(2);

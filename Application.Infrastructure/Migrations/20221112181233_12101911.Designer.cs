@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Infrastructure.Migrations
 {
     [DbContext(typeof(GitInsightContext))]
-    [Migration("20221104203735_myMigration01")]
-    partial class myMigration01
+    [Migration("20221112181233_12101911")]
+    partial class _12101911
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace Application.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Author", b =>
+            modelBuilder.Entity("GitAuthor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,30 +36,37 @@ namespace Application.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("GitRepoId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int?>("RepoId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("RepoId");
+                    b.HasIndex("GitRepoId");
 
                     b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("GitCommit", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("CommitHash")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -77,7 +84,7 @@ namespace Application.Infrastructure.Migrations
                     b.ToTable("Commits");
                 });
 
-            modelBuilder.Entity("Repo", b =>
+            modelBuilder.Entity("GitRepo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,23 +101,23 @@ namespace Application.Infrastructure.Migrations
                     b.ToTable("Repos");
                 });
 
-            modelBuilder.Entity("Author", b =>
+            modelBuilder.Entity("GitAuthor", b =>
                 {
-                    b.HasOne("Repo", null)
-                        .WithMany("authors")
-                        .HasForeignKey("RepoId");
+                    b.HasOne("GitRepo", null)
+                        .WithMany("Authors")
+                        .HasForeignKey("GitRepoId");
                 });
 
             modelBuilder.Entity("GitCommit", b =>
                 {
-                    b.HasOne("Author", "Author")
+                    b.HasOne("GitAuthor", "Author")
                         .WithMany("commits")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Repo", "Repo")
-                        .WithMany("commits")
+                    b.HasOne("GitRepo", "Repo")
+                        .WithMany("Commits")
                         .HasForeignKey("RepoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -120,16 +127,16 @@ namespace Application.Infrastructure.Migrations
                     b.Navigation("Repo");
                 });
 
-            modelBuilder.Entity("Author", b =>
+            modelBuilder.Entity("GitAuthor", b =>
                 {
                     b.Navigation("commits");
                 });
 
-            modelBuilder.Entity("Repo", b =>
+            modelBuilder.Entity("GitRepo", b =>
                 {
-                    b.Navigation("authors");
+                    b.Navigation("Authors");
 
-                    b.Navigation("commits");
+                    b.Navigation("Commits");
                 });
 #pragma warning restore 612, 618
         }

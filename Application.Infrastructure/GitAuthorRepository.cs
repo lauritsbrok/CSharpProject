@@ -44,7 +44,7 @@ public class GitAuthorRepository : IGitAuthorRepository
     {
         var Author = from u in _context.Authors
                      where u.Id == authorId
-                     select new GitAuthorDTO(u.Id, u.Name, u.Email);
+                     select new GitAuthorDTO(u.Name, u.Email);
         return Author.FirstOrDefault();
     }
 
@@ -53,7 +53,7 @@ public class GitAuthorRepository : IGitAuthorRepository
         var Authors = 
             from u in _context.Authors
             orderby u.Name
-            select new GitAuthorDTO(u.Id, u.Name, u.Email);
+            select new GitAuthorDTO(u.Name, u.Email);
 
         return Authors.ToArray();
     }

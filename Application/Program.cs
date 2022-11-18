@@ -1,35 +1,37 @@
 ﻿using System.Globalization;
+using Application.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace Program;
 
 public class Program{
 
     public static void Main(String[] args){
+        var factory = new GitInsightContextFactory();
+        using var context = factory.CreateDbContext(args);
+        context.Database.Migrate();
+        var repoRepository = new GitRepoRepository(context);
+        var commitRepository = new GitCommitRepository(context);
+        var authorRepository = new GitAuthorRepository(context);
         Console.WriteLine("Enter github repo path");
-        var path = Console.ReadLine();
-        Console.WriteLine("Choose desired info");
-        Console.WriteLine("1) Commit Frequency Mode");
-        Console.WriteLine("2) Commit Author Mode");
-        int chosenMode = int.Parse(Console.ReadLine()!);
-        switch (chosenMode) {
-            case 1:
-            var commitList = CommitFrequencyMode(path!);
-            foreach (String commit in commitList) {
-                Console.WriteLine(commit);
-            }
-            break;
-
-            case 2:
-            var dict = CommitAuthorMode(path!);
-
-            foreach(var a in dict) {
-                Console.WriteLine(a.Key);
-                foreach(var b in a.Value){
-                    Console.WriteLine("      " + b.Value.ToString() + " " + b.Key);
+        var repoUrl = Console.ReadLine();
+        var (response, id) = repoRepository.Create(new GitRepoCreateDTO(repoUrl, null, null));
+        
+        if(Repository.IsValid(repoUrl)) {
+            using (var repo = new Repository(repoUrl))
+            {
+                HashSet<GitAuthorDTO> authors = new HashSet<GitAuthorDTO>();
+                HashSet<GitCommitDTO> commits = new HashSet<GitCommitDTO>();
+                foreach (var commit in repo.Commits) {
+                    if(repoUrl is not null) {
+                        commitRepository.Create(new GitCommitCreateDTO(commit.Id.ToString(), commit.MessageShort, new GitAuthorDTO(commit.Author.Name, commit.Author.Email), repoUrl));
+                    }
+                    var (res, autid) = authorRepository.Create(new GitAuthorCreateDTO(commit.Author.Name, commit.Author.Email));
+                    commits.Add(new GitCommitDTO(commit.Id.ToString(), commit.MessageShort, commit.Author.Name, repoUrl));
+                    authors.Add(new GitAuthorDTO(commit.Author.Name, commit.Author.Email));
                 }
-                Console.WriteLine();
+                repoRepository.Update(new GitRepoDTO(id, repoUrl, commits, authors));
             }
-            break;
         }
     }
     public static IEnumerable<String> CommitFrequencyMode(String path){

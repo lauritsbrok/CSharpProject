@@ -47,19 +47,23 @@ namespace Application.Infrastructure.Migrations
 
                     b.HasIndex("GitRepoId");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("GitCommit", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("CommitHash")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Message")
                         .IsRequired()

@@ -49,13 +49,13 @@ public class GitAuthorRepositoryTests : IDisposable
     }
 
     [Fact]
-    public void Find() => _repository.Find(2).Should().Be(new GitAuthorDTO(2, "Tim", "tim@mail.com"));
+    public void Find() => _repository.Find(2).Should().Be(new GitAuthorDTO("Tim", "tim@mail.com"));
 
     [Fact]
     public void Find_Non_Existing() => _repository.Find(42).Should().BeNull();
 
     [Fact]
-    public void Read() => _repository.Read().Should().BeEquivalentTo(new[] { new GitAuthorDTO(1, "Bob", "bob@mail.com"), new GitAuthorDTO(2, "Tim", "tim@mail.com") });
+    public void Read() => _repository.Read().Should().BeEquivalentTo(new[] { new GitAuthorDTO("Bob", "bob@mail.com"), new GitAuthorDTO("Tim", "tim@mail.com") });
 
     [Fact]
     public void Update_Non_Existing() => _repository.Update(new GitAuthorUpdateDTO(42, "Tim", "tim@mail.com")).Should().Be(NotFound);

@@ -16,7 +16,7 @@ How to use API via terminal:
 1.  Open a new terminal and run:
     httprepl https://localhost:7092
     You might need to run the following if you get errors:
-    export PATH="$PATH:/Users/lauritsbrok/.dotnet/tools"
+    export PATH="$PATH:/Users/tjornelund/.dotnet/tools"
     dotnet dev-certs https --trust
 
 2.  Type 'ls' to show API's

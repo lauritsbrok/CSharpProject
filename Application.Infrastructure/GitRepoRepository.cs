@@ -1,10 +1,19 @@
 public class GitRepoRepository : IGitRepoRepository
 {
     private readonly GitInsightContext _context;
+    private readonly iGitCommitRepository _gitCommitRepository;
+    private readonly iGitAuthorRepository _gitAuthorRepository;
 
     public GitRepoRepository(GitInsightContext context)
     {
         _context = context;
+    }
+
+    public GitRepoRepository(GitInsightContext context, iGitCommitRepository gitCommitRepository, iGitAuthorRepository gitAuthorRepository)
+    {
+        _context = context;
+        _gitCommitRepository = gitCommitRepository;
+        _gitAuthorRepository = gitAuthorRepository;
     }
 
     public (Response Response, int RepoId) Create(GitRepoCreateDTO repo)
@@ -52,8 +61,8 @@ public class GitRepoRepository : IGitRepoRepository
     {
         var Repo = from r in _context.Repos
                      where r.Id == repoId
-                     let commits = r.Commits.Select(c => new GitCommitDTO(c.Id, c.Message, c.Author.Name, c.Repo.Url)).ToHashSet()
-                     let authors = r.Authors.Select(a => new GitAuthorDTO(a.Id, a.Name, a.Email)).ToHashSet()
+                     let commits = r.Commits.Select(c => new GitCommitDTO(c.CommitHash, c.Message, c.Author.Name, c.Repo.Url)).ToHashSet()
+                     let authors = r.Authors.Select(a => new GitAuthorDTO(a.Name, a.Email)).ToHashSet()
                      select new GitRepoDTO(r.Id, r.Url, commits, authors);
         return Repo.FirstOrDefault();
     }
@@ -63,8 +72,8 @@ public class GitRepoRepository : IGitRepoRepository
         var Repos = 
             from r in _context.Repos
             orderby r.Id
-            let commits = r.Commits.Select(c => new GitCommitDTO(c.Id, c.Message, c.Author.Name, c.Repo.Url)).ToHashSet()
-            let authors = r.Authors.Select(a => new GitAuthorDTO(a.Id, a.Name, a.Email)).ToHashSet()
+            let commits = r.Commits.Select(c => new GitCommitDTO(c.CommitHash, c.Message, c.Author.Name, c.Repo.Url)).ToHashSet()
+            let authors = r.Authors.Select(a => new GitAuthorDTO(a.Name, a.Email)).ToHashSet()
             select new GitRepoDTO(r.Id, r.Url, commits, authors);
 
         return Repos.ToArray();
@@ -93,9 +102,9 @@ public class GitRepoRepository : IGitRepoRepository
     {
         var existing = new Dictionary<int, GitAuthor>();
         foreach (var commit in commits) {
-            var foundCommit = _context.Commits.Where(c => c.Id == commit.Id).FirstOrDefault();
+            var foundCommit = _context.Commits.Where(c => c.CommitHash == commit.commitId).FirstOrDefault();
 
-            yield return foundCommit ?? new GitCommit(commit.Id, commit.Message);
+            yield return foundCommit ?? new GitCommit(commit.commitId, commit.Message);
         }
     }
 
@@ -103,8 +112,11 @@ public class GitRepoRepository : IGitRepoRepository
     {
         var existing = new Dictionary<int, GitAuthor>();
         foreach (var author in authors) {
-            var foundAuthor = _context.Authors.Where(a => a.Id == author.Id).FirstOrDefault();
+            var foundAuthor = _context.Authors.Where(a => a.Email == author.Email).FirstOrDefault();
+            if (foundAuthor is null) {
+                gitAuthorRepository.Create()
 
+            }
             yield return foundAuthor ?? new GitAuthor(author.Name, author.Email);
         }
     }

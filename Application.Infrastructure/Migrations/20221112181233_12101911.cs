@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class myMigration01 : Migration
+    public partial class _12101911 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,14 +32,14 @@ namespace Application.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    RepoId = table.Column<int>(type: "integer", nullable: true)
+                    GitRepoId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Authors_Repos_RepoId",
-                        column: x => x.RepoId,
+                        name: "FK_Authors_Repos_GitRepoId",
+                        column: x => x.GitRepoId,
                         principalTable: "Repos",
                         principalColumn: "Id");
                 });
@@ -48,7 +48,9 @@ namespace Application.Infrastructure.Migrations
                 name: "Commits",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CommitHash = table.Column<string>(type: "text", nullable: false),
                     Message = table.Column<string>(type: "text", nullable: false),
                     AuthorId = table.Column<int>(type: "integer", nullable: false),
                     RepoId = table.Column<int>(type: "integer", nullable: false)
@@ -77,9 +79,9 @@ namespace Application.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_RepoId",
+                name: "IX_Authors_GitRepoId",
                 table: "Authors",
-                column: "RepoId");
+                column: "GitRepoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commits_AuthorId",
