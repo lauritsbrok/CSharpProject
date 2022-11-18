@@ -71,7 +71,7 @@ public class GitInsight{
                 dict.Add(commitDate, 1);
                 commitsByNameAndDateAndCount.Add(commitName, dict);
             }
-
+            
             int count;
             commitsByNameAndDateAndCount[commitName].TryGetValue(commitDate, out count);
             commitsByNameAndDateAndCount[commitName][commitDate] = count + 1;
