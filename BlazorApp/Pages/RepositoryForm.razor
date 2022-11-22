@@ -1,0 +1,67 @@
+@page "/templateform"
+@using Microsoft.Extensions.Logging
+@using System.Net.Http.Headers
+@using System.Text.Json
+@inject ILogger<RepositoryFormModel> Logger
+
+<style>
+    form .row {
+        margin-bottom: 16px;
+    }
+</style>
+
+<EditForm Model="@repositoryFormModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container-fluid">
+        <RadzenFieldset Text="Repository Info" style="width:80%;">
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Repository Username" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox id="username" @bind-Value="repositoryFormModel.Username" style="width: 100%;" Name="Username" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Repository Name" />
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox id="repositoryname" @bind-Value="repositoryFormModel.RepositoryName" style="width: 100%;" Name="RepositoryName" />
+                </div>
+            </div>
+        </RadzenFieldset>
+        <div class="row justify-content-center">
+            <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <RadzenButton type="submit" Icon="save" Text="Generate Graphs" />
+            </div>
+        </div>
+    </div>
+</EditForm>        
+
+@code {
+    private RepositoryFormModel repositoryFormModel = new();
+
+    private async void HandleValidSubmit()
+    {
+        Logger.LogInformation("HandleValidSubmit called");
+
+        Console.WriteLine(repositoryFormModel.Username + " " + repositoryFormModel.RepositoryName);
+
+        using HttpClient client = new();
+        client.DefaultRequestHeaders.Accept.Clear();
+        client.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/vnd.github.v3+json"));
+        client.DefaultRequestHeaders.Add("User-Agent", ".NET Foundation Repository Reporter");
+
+        await ProcessRepositoriesAsync(client, repositoryFormModel.Username, repositoryFormModel.RepositoryName);
+    }
+
+    static async Task ProcessRepositoriesAsync(HttpClient client, String username, String repositoryname) {
+        var stream = await client.GetStreamAsync(
+         "https://localhost:7092/CommitFrequency/" + username + "/" + repositoryname);
+        var list = await JsonSerializer.DeserializeAsync<IEnumerable<String>>(stream);
+        
+    }
+}
