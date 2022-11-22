@@ -1,0 +1,27 @@
+﻿@page "/"
+
+
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<PageTitle>Index</PageTitle>
+<form method="GET">
+  <div class="form-group">
+    <label for="GitHubUrl">Github Repository URL address</label>
+    <input type="text" class="form-control" id="RepoUrl" @bind="Username" placeholder="Enter Username">
+    <input type="text" class="form-control" id="RepoUrl" @bind="repositoryName" placeholder="Enter Repository">
+  </div>
+  <button @onclick="@Navigate" type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+@code{
+
+    public string Username { get; set; }
+    public string repositoryName { get; set; }
+    public string url = "/CommitList";
+
+    public void Navigate()
+    {
+      navigationManager.NavigateTo(url + "/" + Username + "/" + repositoryName, true);
+    }
+}

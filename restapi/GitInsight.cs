@@ -25,24 +25,31 @@ How to use API via terminal:
 
 */
 
-public class GitInsight{
+public class GitInsight
+{
 
-    public static IEnumerable<String> CommitFrequencyMode(String path){
-        if(Repository.IsValid(path)){
+    public static IEnumerable<String> CommitFrequencyMode(String path)
+    {
+        if (Repository.IsValid(path))
+        {
             var commitDict = new Dictionary<String, int>();
             var listCommit = new List<String>();
             using (var repo = new Repository(path))
-                {
+            {
                 var commits = repo.Branches.SelectMany(x => x.Commits)
                     .GroupBy(x => x.Sha)
                     .Select(x => x.First())
                     .ToArray();
-                foreach (var commit in commits) {
+                foreach (var commit in commits)
+                {
                     var commitDate = commit.Author.When.Date.ToString("d", new CultureInfo("da-DK"));
                     commitDate = commitDate.Replace(".", "-");
-                    if(commitDict.ContainsKey(commitDate)) {
+                    if (commitDict.ContainsKey(commitDate))
+                    {
                         commitDict[commitDate] += 1;
-                    } else {
+                    }
+                    else
+                    {
                         commitDict.Add(commitDate, 1);
                     }
                 }
@@ -53,20 +60,23 @@ public class GitInsight{
         throw new ArgumentException();
     }
 
-    public static Dictionary<String, Dictionary<String, int>> CommitAuthorMode(String path){
+    public static Dictionary<String, Dictionary<String, int>> CommitAuthorMode(String path)
+    {
         var repo = new Repository(path);
         var commits = repo.Commits;
         Console.WriteLine(repo.Network.Remotes.First().Url);
 
         var commitsByNameAndDateAndCount = new Dictionary<String, Dictionary<String, int>>();
 
-        foreach(Commit a in commits){
+        foreach (Commit a in commits)
+        {
             var commitName = a.Committer.Name;
             var commitDate = a.Author.When.Date.ToString("d", new CultureInfo("da-DK"));
             commitDate = commitDate.Replace(".", "-");
 
             Dictionary<String, int> currentDict;
-            if(!commitsByNameAndDateAndCount.TryGetValue(commitName, out currentDict)){
+            if (!commitsByNameAndDateAndCount.TryGetValue(commitName, out currentDict))
+            {
                 var dict = new Dictionary<String, int>();
                 dict.Add(commitDate, 1);
                 commitsByNameAndDateAndCount.Add(commitName, dict);
@@ -79,11 +89,22 @@ public class GitInsight{
         return commitsByNameAndDateAndCount;
     }
 
-    public static void cloneRepo(string user, string repo){
-        var repoPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)+ "/" + repo + "/";
-        if(!Directory.Exists(repoPath)){
-            Repository.Clone("https://github.com/" + user + "/" + repo + ".git", repoPath);
-        } else {
+    public static void cloneRepo(string user, string repo)
+    {
+        var repoPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "/" + repo + "/";
+        if (!Directory.Exists(repoPath))
+        {
+            try
+            {
+                Repository.Clone("https://github.com/" + user + "/" + repo + ".git", repoPath);
+            }
+            catch
+            {
+            }
+
+        }
+        else
+        {
             Repository repository = new Repository(repoPath);
 
             PullOptions pullOptions = new PullOptions()
@@ -94,7 +115,7 @@ public class GitInsight{
                 }
             };
             var signature = new Signature("GitInsight", "nomail@gitinsight.com", new DateTimeOffset(DateTime.Now));
-            Commands.Pull(repository, signature, pullOptions);    
+            Commands.Pull(repository, signature, pullOptions);
         }
     }
 }

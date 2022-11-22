@@ -1,0 +1,1 @@
+public record CommitFreqDTO(int Count, DateTime date);
